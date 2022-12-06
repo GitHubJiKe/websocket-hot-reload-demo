@@ -1,11 +1,9 @@
 const express = require("express");
 const path = require("path");
-const routes = require("./routes");
-
+const router = require("./router")
 const app = express();
-
 app.use("/public", express.static(path.resolve(__dirname, "../public")));
-app.get("/", routes.indexRoute);
-app.get("/websocket", routes.socketRoute);
+app.use('/', router)
+
 
 module.exports = app;

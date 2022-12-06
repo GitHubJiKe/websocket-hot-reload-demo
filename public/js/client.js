@@ -2,6 +2,13 @@ const port = document
     .querySelector("meta[name='port']")
     .getAttribute("content");
 console.log(port);
+const articles = document
+    .querySelector("meta[name='articles']")
+    .getAttribute("content");
+console.log(articles);
+articles.split(",").forEach(articleName => {
+
+})
 const ws = new WebSocket(`ws://localhost:${Number(port)}`);
 
 ws.onmessage = (event) => {

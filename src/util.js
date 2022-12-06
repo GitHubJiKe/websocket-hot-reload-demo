@@ -6,7 +6,7 @@ const store = require("./store");
 
 const staticPath = path.resolve(__dirname, "../public");
 const indexHtmlPath = path.resolve(staticPath, "./index.html");
-const readmePath = path.resolve(__dirname, "../README.md");
+const articleDirPath = path.resolve(__dirname, "../articles");
 
 // 创建md5 hash字符串
 const md5 = (content) => crypto.createHash("md5").update(content).digest("hex");
@@ -19,6 +19,9 @@ const randomColor = () =>
 const wrappedWssPort = (content) =>
     content.replace("$PORT$", constant.WSS_PORT);
 
+const wrappedArticleNames = (content, filenames) =>
+    content.replace("$ARTICLES$", filenames);
+
 const handleHTMLRes = (res) => (content) => {
     res.setHeader("content-type", "text/html");
     res.statusCode = 200;
@@ -30,35 +33,28 @@ const reload = () => {
     store.wsMap.forEach((ws) => ws.send("reload"));
 };
 
+const reloadMap = {
+    [indexHtmlPath]: () => {
+        const newHash = md5(getHTMLContent(indexHtmlPath));
+        if (store.hashMap.size !== 0 && store.hashMap.has(newHash)) {
+            // 内容没有发生变化，不用刷新
+            return;
+        }
+        store.hashMap.clear();
+        return reload;
+    }
+}
+
 module.exports = {
     indexHtmlPath,
     staticPath,
-    readmePath,
+    articleDirPath,
+    reloadMap,
     md5,
     getHTMLContent,
     randomColor,
     wrappedWssPort,
+    wrappedArticleNames,
     handleHTMLRes,
     reload,
-    reloadMap: {
-        [indexHtmlPath]: () => {
-            const newHash = md5(getHTMLContent(indexHtmlPath));
-            if (store.hashMap.size !== 0 && store.hashMap.has(newHash)) {
-                // 内容没有发生变化，不用刷新
-                return;
-            }
-            store.hashMap.clear();
-            return reload;
-        },
-        [readmePath]: () => {
-            const htmlContent = require("./convert").readme2HTML();
-            const newHash = md5(htmlContent);
-            if (store.hashMap.size !== 0 && store.hashMap.has(newHash)) {
-                // 内容没有发生变化，不用刷新
-                return;
-            }
-            store.hashMap.clear();
-            return reload;
-        },
-    },
 };

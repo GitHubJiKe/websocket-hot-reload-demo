@@ -5,7 +5,7 @@ const store = require("./store");
 const constant = require("./constant");
 
 const wss = new WebSocketServer({ port: constant.WSS_PORT });
-const watcher = chokidar.watch([util.staticPath, util.readmePath]);
+const watcher = chokidar.watch([util.staticPath, util.articleDirPath]);
 
 // ------------------------websocker建立连接------------------------------
 wss.on("connection", function connection(ws) {

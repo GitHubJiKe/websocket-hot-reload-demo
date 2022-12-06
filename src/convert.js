@@ -40,8 +40,5 @@ const convertFunc = (filepath) => {
     return getCompleteHTML(convert.makeHtml(markdownContent));
 };
 module.exports = {
-    readme2HTML: () => {
-        return convertFunc(util.readmePath);
-    },
     convert: convertFunc,
 };
