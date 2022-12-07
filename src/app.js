@@ -1,8 +1,10 @@
 const express = require("express");
-const path = require("path");
 const router = require("./router")
+const constant = require("./constant")
+
+
 const app = express();
-app.use("/public", express.static(path.resolve(__dirname, "../public")));
+app.use("/public", express.static(constant.staticPath));
 app.use('/', router)
 
 

@@ -5,7 +5,7 @@ const store = require("./store");
 const constant = require("./constant");
 
 const wss = new WebSocketServer({ port: constant.WSS_PORT });
-const watcher = chokidar.watch([util.staticPath, util.articleDirPath]);
+const watcher = chokidar.watch([constant.staticPath, constant.articleDirPath]);
 
 // ------------------------websocker建立连接------------------------------
 wss.on("connection", function connection(ws) {
@@ -21,14 +21,14 @@ wss.on("connection", function connection(ws) {
     });
 });
 // -------------------------文件监听-----------------------------
-watcher.on("change", async (filepath) => {
-    const func = util.reloadMap[filepath];
-    if (typeof func === "function") {
-        const reload = func();
-        if (reload) {
-            reload();
-        }
-    } else {
-        util.reload();
-    }
+watcher.on("change", () => {
+    util.reload();
 });
+
+watcher.on("add", () => {
+    util.reload();
+})
+
+watcher.on("unlink", () => {
+    util.reload();
+})

@@ -2,13 +2,22 @@ const port = document
     .querySelector("meta[name='port']")
     .getAttribute("content");
 console.log(port);
-const articles = document
-    .querySelector("meta[name='articles']")
-    .getAttribute("content");
-console.log(articles);
-articles.split(",").forEach(articleName => {
 
-})
+const articleLinks = document.querySelector("#articleLinks")
+const articleLink = document.querySelector("#articleLink")
+if (articleLinks) {
+    const articles = document
+        .querySelector("meta[name='articles']")
+        .getAttribute("content");
+    articles.split(",").forEach(articleName => {
+        const ele = articleLink.content.cloneNode(true);
+        const aEle = ele.querySelector('a');
+        aEle.href = `/${articleName}`
+        aEle.innerHTML = `${articleName}`
+        articleLinks.appendChild(ele)
+    })
+}
+
 const ws = new WebSocket(`ws://localhost:${Number(port)}`);
 
 ws.onmessage = (event) => {

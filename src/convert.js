@@ -1,34 +1,12 @@
 const showdown = require("showdown");
 const { JSDOM } = require("jsdom");
 const fs = require("fs");
-const util = require("./util");
+const constant = require("./constant");
 
-const opts = {
-    strikethrough: true,
-    underline: true,
-    tasklists: true,
-    tables: true,
-    tablesHeaderId: true,
-    splitAdjacentBlockquotes: true,
-    smartIndentationFix: true,
-    simplifiedAutoLink: true,
-    simpleLineBreaks: true,
-    requireSpaceBeforeHeadingText: true,
-    parseImgDimensions: true,
-    openLinksInNewWindow: true,
-    omitExtraWLInCodeBlocks: true,
-    ghMentions: true,
-    excludeTrailingPunctuationFromURLs: true,
-    encodeEmails: true,
-    emoji: true,
-    backslashEscapesHTMLTags: true,
-    metadata: true,
-};
-
-const convert = new showdown.Converter(opts);
+const convert = new showdown.Converter(constant.showdownOpts);
 
 function getCompleteHTML(content) {
-    const dom = new JSDOM(fs.readFileSync(util.indexHtmlPath).toString());
+    const dom = new JSDOM(fs.readFileSync(constant.indexHtmlPath).toString());
     dom.window.document.body.querySelector("#app").remove();
     const eles = new JSDOM(content).window.document.body.querySelectorAll("*");
     dom.window.document.body.append(...eles);
@@ -36,8 +14,12 @@ function getCompleteHTML(content) {
 }
 
 const convertFunc = (filepath) => {
-    const markdownContent = fs.readFileSync(filepath).toString();
-    return getCompleteHTML(convert.makeHtml(markdownContent));
+    try {
+        const markdownContent = fs.readFileSync(filepath).toString();
+        return getCompleteHTML(convert.makeHtml(markdownContent));
+    } catch (error) {
+        return getCompleteHTML(`<p style="color:red;">Not found File:${filepath}</p>`)
+    }
 };
 module.exports = {
     convert: convertFunc,

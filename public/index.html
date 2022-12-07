@@ -20,10 +20,12 @@
       热更新的原理很简单，其实就是借助websocket，在客户端和服务端之间建立一个全双工的长连接；
       然后，通过监听源文件的变更，当有变化的时候，就推送给客户端刷新页面的消息，客户端执行刷新操作，页面reload,加载最新的静态资源
     </p>
-    <ul id="articleLinks">
+    <template id="articleLink">
       <li>
-        <a href="/websocket">websocket 协议</a>
+        <a></a>
       </li>
+    </template>
+    <ul id="articleLinks">
     </ul>
   </div>
   <script src="/public/js/client.js"></script>
