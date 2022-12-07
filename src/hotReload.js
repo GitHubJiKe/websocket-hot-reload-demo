@@ -3,9 +3,15 @@ const chokidar = require("chokidar");
 const util = require("./util");
 const store = require("./store");
 const constant = require("./constant");
+const router = require("./router");
+const path = require("path");
 
 const wss = new WebSocketServer({ port: constant.WSS_PORT });
-const watcher = chokidar.watch([constant.staticPath, constant.articleDirPath]);
+const watcher = chokidar.watch([
+    constant.staticPath,
+    constant.articleDirPath,
+    constant.readmePath,
+]);
 
 // ------------------------websocker建立连接------------------------------
 wss.on("connection", function connection(ws) {
@@ -27,8 +33,8 @@ watcher.on("change", () => {
 
 watcher.on("add", () => {
     util.reload();
-})
+});
 
 watcher.on("unlink", () => {
     util.reload();
-})
+});

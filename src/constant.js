@@ -5,6 +5,9 @@ const WSS_PORT = PORT + 1;
 const staticPath = path.resolve(__dirname, "../public");
 const indexHtmlPath = path.resolve(staticPath, "./index.html");
 const articleDirPath = path.resolve(__dirname, "../articles");
+const templatePath = path.resolve(__dirname, "../template/index.ejs");
+const articleTemplatePath = path.resolve(__dirname, "../template/article.ejs");
+const readmePath = path.resolve(__dirname, "../README.md");
 const showdownOpts = {
     strikethrough: true,
     underline: true,
@@ -25,12 +28,15 @@ const showdownOpts = {
     emoji: true,
     backslashEscapesHTMLTags: true,
     metadata: true,
-}
+};
 module.exports = {
     PORT,
     WSS_PORT,
     showdownOpts,
     staticPath,
     indexHtmlPath,
-    articleDirPath
+    articleDirPath,
+    templatePath,
+    readmePath,
+    articleTemplatePath,
 };
