@@ -4,18 +4,14 @@ const constant = require("./constant");
 const convert = require("./convert");
 const store = require("./store");
 const ejs = require("ejs");
-const router = require("./router");
 
 const randomColor = () =>
     `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 
-const wrappedWssPort = (content) =>
-    content.replace("$PORT$", constant.WSS_PORT);
-
 const handleHTMLRes = (res) => (content) => {
     res.setHeader("content-type", "text/html");
     res.statusCode = 200;
-    res.end(content);
+    res.send(content);
 };
 
 const reload = () => store.wsMap.forEach((ws) => ws.send("reload"));
@@ -27,7 +23,7 @@ function getArticleFilenames() {
 }
 
 async function getIndexHTMLContent() {
-    return await ejs.renderFile(constant.templatePath, {
+    return await ejs.renderFile(constant.indexTemPath, {
         port: constant.WSS_PORT,
         articleNames: getArticleFilenames(),
         title: "主页",
@@ -43,10 +39,20 @@ async function getArticleContent(articlePath) {
     });
 }
 
+async function getNotFoundContent() {
+    return await ejs.renderFile(constant.notFoundPath);
+}
+
+async function getEditorContent(content = "", title = "") {
+    return await ejs.renderFile(constant.editorPath, { content, title });
+}
+
 module.exports = {
-    getIndexHTMLContent,
     randomColor,
     handleHTMLRes,
     reload,
+    getIndexHTMLContent,
     getArticleContent,
+    getNotFoundContent,
+    getEditorContent,
 };

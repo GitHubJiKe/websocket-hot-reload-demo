@@ -23,3 +23,11 @@ img {
     bottom: 30px;
     cursor: pointer;
 }
+.operations {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+#editBtn {
+    float: right;
+}

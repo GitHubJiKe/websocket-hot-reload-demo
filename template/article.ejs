@@ -11,7 +11,15 @@
     </head>
 
     <body>
-        <div id="app"><%- content %></div>
+        <div id="app">
+            <div class="operations">
+                <button id="editBtn">编辑</button>
+                <button id="newBtn">
+                    <a href="/editor" target="_blank">新建</a>
+                </button>
+            </div>
+            <%- content %>
+        </div>
         <script src="/public/js/client.js"></script>
     </body>
 </html>

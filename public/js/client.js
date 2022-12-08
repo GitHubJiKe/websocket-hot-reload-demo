@@ -3,19 +3,19 @@ const port = document
     .getAttribute("content");
 console.log(port);
 
-const articleLinks = document.querySelector("#articleLinks")
-const articleLink = document.querySelector("#articleLink")
+const articleLinks = document.querySelector("#articleLinks");
+const articleLink = document.querySelector("#articleLink");
 if (articleLinks) {
     const articles = document
         .querySelector("meta[name='articles']")
         .getAttribute("content");
-    articles.split(",").forEach(articleName => {
+    articles.split(",").forEach((articleName) => {
         const ele = articleLink.content.cloneNode(true);
-        const aEle = ele.querySelector('a');
-        aEle.href = `/${articleName}`
-        aEle.innerHTML = `${articleName}`
-        articleLinks.appendChild(ele)
-    })
+        const aEle = ele.querySelector("a");
+        aEle.href = `/${articleName}`;
+        aEle.innerHTML = `${articleName}`;
+        articleLinks.appendChild(ele);
+    });
 }
 
 const ws = new WebSocket(`ws://localhost:${Number(port)}`);
@@ -68,4 +68,16 @@ function scroll2Top() {
     }
 
     window.requestAnimationFrame(watchScroll);
+})();
+
+(() => {
+    const editBtn = document.querySelector("#editBtn");
+    if (editBtn) {
+        editBtn.addEventListener("click", () => {
+            const title = document.querySelector("title").innerText;
+            if (title) {
+                window.location.replace(`/editor/${title}`);
+            }
+        });
+    }
 })();

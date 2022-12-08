@@ -3,13 +3,20 @@ const router = express.Router();
 const util = require("./util");
 const constant = require("./constant");
 const fs = require("fs");
-const ejs = require("ejs");
+const convert = require("./convert");
+const { promisify } = require("util");
+
+const writeFilePro = promisify(fs.writeFile);
 
 function validUrl(url) {
-    if (url === "/") {
+    if (["/", "/editor", "/post"].includes(url)) {
         return true;
     }
-    return /^\/article\/[a-zA-Z\u4e00-\u9fa5]/.test(decodeURI(url));
+    const regxs = [
+        /^\/article\/[0-9a-zA-Z\u4e00-\u9fa5]/,
+        /^\/editor\/[0-9a-zA-Z\u4e00-\u9fa5]/,
+    ];
+    return regxs.some((regx) => regx.test(decodeURI(url)));
 }
 
 router.all("*", async (req, res, next) => {
@@ -17,7 +24,7 @@ router.all("*", async (req, res, next) => {
         next();
         return;
     }
-    const htmlContent = await ejs.renderFile(constant.notFoundPath);
+    const htmlContent = await util.getNotFoundContent();
     util.handleHTMLRes(res)(htmlContent);
 });
 
@@ -37,8 +44,31 @@ router.get(`/article/:name`, async (req, res) => {
         }
     }
 
-    const htmlContent = await ejs.renderFile(constant.notFoundPath);
+    const htmlContent = await util.getNotFoundContent();
     util.handleHTMLRes(res)(htmlContent);
+});
+
+router.get("/editor", async (_req, res) => {
+    const htmlContent = await util.getEditorContent();
+    util.handleHTMLRes(res)(htmlContent);
+});
+
+router.get("/editor/:name", async (req, res) => {
+    const articleName = req.params.name;
+    const articlePath = `${constant.articleDirPath}/${articleName}.md`;
+    const content = convert.convert(articlePath);
+    const htmlContent = await util.getEditorContent(content, articleName);
+    util.handleHTMLRes(res)(htmlContent);
+});
+
+router.post("/post", async (req, res) => {
+    const { content, title } = req.body;
+    const markdownContent = convert.unconvert(content);
+    await writeFilePro(
+        `${constant.articleDirPath}/${title || Date.now()}.md`,
+        markdownContent
+    );
+    res.end("OK");
 });
 
 module.exports = router;

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="content" content="<%= content %>" />
+        <meta name="title" content="<%= title %>" />
+        <title>Editor</title>
+
+        <link href="/public/style/editor.css" rel="stylesheet" />
+        <script src="/public/js/wangEditor.js"></script>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                border: none;
+            }
+            #editor—wrapper {
+                border: 1px solid #ccc;
+                z-index: 100; /* 按需定义 */
+                height: 90vh;
+            }
+            #toolbar-container {
+                border-bottom: 1px solid #ccc;
+            }
+            #editor-container {
+                height: 500px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="editor—wrapper">
+            <div id="toolbar-container"><!-- 工具栏 --></div>
+            <div id="editor-container"><!-- 编辑器 --></div>
+        </div>
+        <div style="text-align: center; margin-top: 12px">
+            <button id="submit">提交</button>
+        </div>
+        <script src="/public/js/initEditor.js"></script>
+    </body>
+</html>

@@ -16,7 +16,9 @@
             <ul>
                 <% articleNames.forEach(function(name){ %>
                 <li>
-                    <a href="/article/<%= name%>"><%= name %></a>
+                    <a href="/article/<%= name%>" target="_blank">
+                        <%= name %>
+                    </a>
                 </li>
                 <% }); %>
             </ul>
