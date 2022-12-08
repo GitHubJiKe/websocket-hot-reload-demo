@@ -4,6 +4,6 @@ const constant = require("./constant");
 
 const app = express();
 app.use("/public", express.static(constant.staticPath));
-app.use("/", router.router);
+app.use("/", router);
 
 module.exports = app;

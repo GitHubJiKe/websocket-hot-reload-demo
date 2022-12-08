@@ -3,8 +3,6 @@ const chokidar = require("chokidar");
 const util = require("./util");
 const store = require("./store");
 const constant = require("./constant");
-const router = require("./router");
-const path = require("path");
 
 const wss = new WebSocketServer({ port: constant.WSS_PORT });
 const watcher = chokidar.watch([
@@ -27,14 +25,6 @@ wss.on("connection", function connection(ws) {
     });
 });
 // -------------------------文件监听-----------------------------
-watcher.on("change", () => {
-    util.reload();
-});
-
-watcher.on("add", () => {
-    util.reload();
-});
-
-watcher.on("unlink", () => {
+watcher.on("all", () => {
     util.reload();
 });
