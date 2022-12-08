@@ -1,4 +1,4 @@
-# 利用 WebSocket 实现热更新
+# WebSocket 实现热更新
 
 ## WebSocket
 
