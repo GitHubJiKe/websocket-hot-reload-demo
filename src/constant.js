@@ -6,6 +6,7 @@ const staticPath = path.resolve(__dirname, "../public");
 const indexHtmlPath = path.resolve(staticPath, "./index.html");
 const articleDirPath = path.resolve(__dirname, "../articles");
 const templatePath = path.resolve(__dirname, "../template/index.ejs");
+const notFoundPath = path.resolve(__dirname, "../template/404.ejs");
 const articleTemplatePath = path.resolve(__dirname, "../template/article.ejs");
 const readmePath = path.resolve(__dirname, "../README.md");
 const showdownOpts = {
@@ -39,4 +40,5 @@ module.exports = {
     templatePath,
     readmePath,
     articleTemplatePath,
+    notFoundPath,
 };

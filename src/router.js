@@ -1,13 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path");
-const fs = require("fs");
 const util = require("./util");
 const constant = require("./constant");
+const fs = require("fs");
+const ejs = require("ejs");
 
-router.use((_req, _res, next) => {
-    console.log("Time: ", Date.now());
-    next();
+function validUrl(url) {
+    if (url === "/") {
+        return true;
+    }
+    return /^\/article\/[a-zA-Z\u4e00-\u9fa5]/.test(decodeURI(url));
+}
+
+router.all("*", async (req, res, next) => {
+    if (validUrl(req.url)) {
+        next();
+        return;
+    }
+    const htmlContent = await ejs.renderFile(constant.notFoundPath);
+    util.handleHTMLRes(res)(htmlContent);
 });
 
 router.get("/", async (_req, res) => {
@@ -17,9 +28,16 @@ router.get("/", async (_req, res) => {
 
 router.get(`/article/:name`, async (req, res) => {
     const articleName = req.params.name;
-    const htmlContent = await util.getArticleContent(
-        `${constant.articleDirPath}/${articleName}.md`
-    );
+    if (articleName) {
+        const articlePath = `${constant.articleDirPath}/${articleName}.md`;
+        if (fs.existsSync(articlePath)) {
+            const htmlContent = await util.getArticleContent(articlePath);
+            util.handleHTMLRes(res)(htmlContent);
+            return;
+        }
+    }
+
+    const htmlContent = await ejs.renderFile(constant.notFoundPath);
     util.handleHTMLRes(res)(htmlContent);
 });
 
